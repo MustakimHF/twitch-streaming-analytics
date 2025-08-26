@@ -1,0 +1,75 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: twitch
+      POSTGRES_PASSWORD: twitch
+      POSTGRES_DB: twitch
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+
+  airflow-init:
+    image: apache/airflow:2.9.2
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      # SQLite metadata DB (file will live inside /opt/airflow/airflow.db)
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////opt/airflow/airflow.db
+      # Twitch + pipeline config
+      TWITCH_CLIENT_ID: ${TWITCH_CLIENT_ID}
+      TWITCH_CLIENT_SECRET: ${TWITCH_CLIENT_SECRET}
+      TWITCH_MAX_PAGES: ${TWITCH_MAX_PAGES}
+      TWITCH_LANG_FILTER: ${TWITCH_LANG_FILTER}
+      DB_URL: ${DB_URL}
+    volumes:
+      - airflow_home:/opt/airflow          # <-- shared Airflow home
+      - ../dags:/opt/airflow/dags          # your DAGs + scripts
+    command: >
+      bash -ce "
+        python -m pip install -r /opt/airflow/dags/requirements.txt || true &&
+        airflow db init &&
+        airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com
+      "
+
+  airflow-webserver:
+    image: apache/airflow:2.9.2
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////opt/airflow/airflow.db
+      TWITCH_CLIENT_ID: ${TWITCH_CLIENT_ID}
+      TWITCH_CLIENT_SECRET: ${TWITCH_CLIENT_SECRET}
+      TWITCH_MAX_PAGES: ${TWITCH_MAX_PAGES}
+      TWITCH_LANG_FILTER: ${TWITCH_LANG_FILTER}
+      DB_URL: ${DB_URL}
+    volumes:
+      - airflow_home:/opt/airflow          # <-- same shared volume
+      - ../dags:/opt/airflow/dags
+    ports: ["8080:8080"]
+    command: "airflow webserver"
+
+  airflow-scheduler:
+    image: apache/airflow:2.9.2
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////opt/airflow/airflow.db
+      TWITCH_CLIENT_ID: ${TWITCH_CLIENT_ID}
+      TWITCH_CLIENT_SECRET: ${TWITCH_CLIENT_SECRET}
+      TWITCH_MAX_PAGES: ${TWITCH_MAX_PAGES}
+      TWITCH_LANG_FILTER: ${TWITCH_LANG_FILTER}
+      DB_URL: ${DB_URL}
+    volumes:
+      - airflow_home:/opt/airflow          # <-- same shared volume
+      - ../dags:/opt/airflow/dags
+    command: "airflow scheduler"
+
+volumes:
+  pgdata:
+  airflow_home:    # <-- new named volume that shares airflow.db

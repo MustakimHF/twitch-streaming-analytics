@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Secrets & local env
+.env
+
+# Data & DB (keep repo light)
+data/
+db/*.db
+
+# VS Code
+.vscode/
