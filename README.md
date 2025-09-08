@@ -134,7 +134,7 @@ Generates plots in `outputs/plots/`, including:
 ![Peak Hours](outputs/plots/peak_hours_analysis.png)  
 
 **Weekend vs Weekday Comparison**  
-![Weekend Analysis](outputs/plots/weekend_analysis.png)  
+
 
 ---
 
