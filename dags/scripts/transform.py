@@ -74,10 +74,13 @@ def run_transform(streams_csv: Path | None = None, games_csv: Path | None = None
     else:
         g = pd.DataFrame(columns=["game_id","game_name"])
 
-    s = s.merge(g[["game_id","game_name"]], how="left", on="game_id")
-    if "game_name" not in s.columns:
-        s["game_name"] = pd.Series(dtype="object")
-    s["game_name"] = s["game_name"].fillna("Unknown")
+    # Only merge if we don't already have game names or if they're missing
+    if "game_name" not in s.columns or s["game_name"].isna().all():
+        s = s.merge(g[["game_id","game_name"]], how="left", on="game_id")
+        s["game_name"] = s["game_name"].fillna("Unknown")
+    else:
+        # Keep existing game names, only fill missing ones
+        s["game_name"] = s["game_name"].fillna("Unknown")
 
 
     # Keep useful columns
