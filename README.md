@@ -38,12 +38,21 @@ twitch-streaming-analytics/
 │   ├── extract_twitch.py       # Extract: Twitch API calls
 │   ├── transform.py            # Transform: clean & enrich data
 │   └── load.py                 # Load: push to Postgres
+├── scripts/                    # Standalone ETL scripts
+│   ├── auth.py                 # Twitch API authentication
+│   ├── extract_twitch.py       # Extract: Twitch API calls
+│   ├── transform.py            # Transform: clean & enrich data
+│   ├── load_db.py              # Load: push to SQLite
+│   └── run_etl.py              # Complete ETL pipeline
+├── analysis/                   # Analysis scripts
+│   ├── top_games.py            # Top games analysis
+│   ├── peak_hours.py           # Peak hours analysis
+│   └── weekend_analysis.py     # Weekend vs weekday analysis
 ├── db/
-│   └── init.sql                # Database schema (streams table)
+│   └── twitch.db               # SQLite database
 ├── data/                       # Raw + processed CSVs
 ├── outputs/
-│   ├── plots/                  # Generated plots (PNG)
-│   └── reports/                # Aggregated summaries
+│   └── plots/                  # Generated plots (PNG)
 ├── .env.example                # Example environment variables
 └── requirements.txt            # Python dependencies
 ```
@@ -94,27 +103,38 @@ Login to Airflow:
 
 ### 4. Explore & Analyse  
 
-Run analysis scripts or notebooks:  
+Run analysis scripts to generate insights and visualizations:  
 
 ```bash
+# Top games analysis
 python analysis/top_games.py
+
+# Peak hours analysis  
+python analysis/peak_hours.py
+
+# Weekend vs weekday analysis
+python analysis/weekend_analysis.py
 ```
 
-Generates plots in `outputs/plots/`, e.g.:  
+Generates plots in `outputs/plots/`, including:  
 
-- 📊 **Top 10 games by average viewers**  
-- ⏰ **Viewership trends over time**  
-- 🎯 **Category diversity**  
+- 📊 **Top games by average viewers** (bar charts + scatter plots)
+- ⏰ **Peak hours analysis** (hourly viewership patterns)  
+- 📅 **Weekend vs weekday comparison** (temporal trends)
+- 🎯 **Game popularity analysis** (stream count vs viewers)  
 
 ---
 
 ## 📊 Example Visuals  
 
-**Top 10 Games by Average Viewers**  
-![Top Games](assets/plots/top_games.png)  
+**Top Games by Average Viewers**  
+![Top Games](outputs/plots/top_games.png)  
 
-**Viewer Trends Over Time**  
-![Viewership Trends](assets/plots/viewer_trends.png)  
+**Peak Hours Analysis**  
+![Peak Hours](outputs/plots/peak_hours_analysis.png)  
+
+**Weekend vs Weekday Comparison**  
+![Weekend Analysis](outputs/plots/weekend_analysis.png)  
 
 ---
 
@@ -127,8 +147,6 @@ This project showcases **real-world data engineering**:
 - **Database design & SQL analytics** for structured insights  
 - **Exploratory analysis & visualisation** for stakeholder reporting  
 - **Containerised deployment** for reproducibility (Docker)  
-
-📌 *This mirrors the workflow of data engineer / data analyst roles in gaming, media, and live-streaming analytics — ideal for portfolios and interviews.*  
 
 ---
 
