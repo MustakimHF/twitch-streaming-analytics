@@ -103,7 +103,7 @@ Login to Airflow:
 
 ### 4. Explore & Analyse  
 
-Run analysis scripts to generate insights and visualizations:  
+Run analysis scripts to generate insights and visualisations:  
 
 ```bash
 # Top games analysis

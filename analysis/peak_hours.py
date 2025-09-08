@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Peak Hours Analysis
-Analyzes viewership patterns by hour of day and generates visualizations.
+Analyses viewership patterns by hour of day and generates visualisations.
 """
 import sqlite3
 import pandas as pd
@@ -20,8 +20,8 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 plt.style.use('seaborn-v0_8')
 sns.set_palette("husl")
 
-def analyze_peak_hours():
-    """Analyze viewership patterns by hour of day."""
+def analyse_peak_hours():
+    """Analyse viewership patterns by hour of day."""
     
     # Connect to database
     conn = sqlite3.connect(DB_PATH)
@@ -49,7 +49,7 @@ def analyze_peak_hours():
         return
     
     print("=== Peak Hours Analysis ===")
-    print(f"Analyzing viewership patterns across {len(df)} hours")
+    print(f"Analysing viewership patterns across {len(df)} hours")
     
     # Find peak hours
     peak_hour_avg = df.loc[df['avg_viewers'].idxmax()]
@@ -58,7 +58,7 @@ def analyze_peak_hours():
     print(f"\nPeak hour by average viewers: {int(peak_hour_avg['hour_of_day'])}:00 ({peak_hour_avg['avg_viewers']:,.0f} avg viewers)")
     print(f"Peak hour by total viewers: {int(peak_hour_total['hour_of_day'])}:00 ({peak_hour_total['total_viewers']:,.0f} total viewers)")
     
-    # Create visualizations
+    # Create visualisations
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(16, 12))
     
     # Plot 1: Average viewers by hour
@@ -128,7 +128,7 @@ def analyze_peak_hours():
     # Create a summary plot showing peak vs off-peak
     fig2, ax5 = plt.subplots(1, 1, figsize=(12, 6))
     
-    # Categorize hours into peak/off-peak
+    # Categorise hours into peak/off-peak
     df['category'] = df['avg_viewers'].apply(
         lambda x: 'Peak Hours' if x > df['avg_viewers'].quantile(0.75) 
         else 'Off-Peak Hours' if x < df['avg_viewers'].quantile(0.25)
@@ -170,4 +170,4 @@ def analyze_peak_hours():
     print(f"• Average viewers during off-peak hours: {df[df['category'] == 'Off-Peak Hours']['avg_viewers'].mean():,.0f}")
 
 if __name__ == "__main__":
-    analyze_peak_hours()
+    analyse_peak_hours()

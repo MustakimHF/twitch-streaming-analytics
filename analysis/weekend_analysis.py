@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Weekend vs Weekday Analysis
-Analyzes viewership patterns comparing weekends vs weekdays and generates visualizations.
+Analyses viewership patterns comparing weekends vs weekdays and generates visualisations.
 """
 import sqlite3
 import pandas as pd
@@ -20,8 +20,8 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 plt.style.use('seaborn-v0_8')
 sns.set_palette("husl")
 
-def analyze_weekend_patterns():
-    """Analyze viewership patterns comparing weekends vs weekdays."""
+def analyse_weekend_patterns():
+    """Analyse viewership patterns comparing weekends vs weekdays."""
     
     # Connect to database
     conn = sqlite3.connect(DB_PATH)
@@ -59,7 +59,7 @@ def analyze_weekend_patterns():
         return
     
     print("=== Weekend vs Weekday Analysis ===")
-    print(f"Analyzing viewership patterns across {len(df)} day categories")
+    print(f"Analysing viewership patterns across {len(df)} day categories")
     
     # Calculate weekend vs weekday aggregates
     weekend_data = df[df['is_weekend'] == 1]
@@ -74,7 +74,7 @@ def analyze_weekend_patterns():
     print(f"Weekday Average Viewers: {weekday_avg:,.0f}")
     print(f"Weekend vs Weekday Difference: {((weekend_avg - weekday_avg) / weekday_avg * 100):+.1f}%")
     
-    # Create visualizations
+    # Create visualisations
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(16, 12))
     
     # Plot 1: Average viewers by day of week
@@ -235,4 +235,4 @@ def analyze_weekend_patterns():
     print(f"• Total weekday streams: {weekday_data['stream_count'].sum():,}")
 
 if __name__ == "__main__":
-    analyze_weekend_patterns()
+    analyse_weekend_patterns()

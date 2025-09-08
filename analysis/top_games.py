@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Top Games Analysis
-Analyzes the most popular games by average viewers and generates visualizations.
+Analyses the most popular games by average viewers and generates visualisations.
 """
 import sqlite3
 import pandas as pd
@@ -19,8 +19,8 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 plt.style.use('seaborn-v0_8')
 sns.set_palette("husl")
 
-def analyze_top_games():
-    """Analyze top games by average viewers and generate plots."""
+def analyse_top_games():
+    """Analyse top games by average viewers and generate plots."""
     
     # Connect to database
     conn = sqlite3.connect(DB_PATH)
@@ -49,11 +49,11 @@ def analyze_top_games():
         return
     
     print("=== Top Games Analysis ===")
-    print(f"Analyzing {len(df)} games with at least 5 streams")
+    print(f"Analysing {len(df)} games with at least 5 streams")
     print("\nTop 10 Games by Average Viewers:")
     print(df[['game_name', 'avg_viewers', 'stream_count']].head(10).to_string(index=False))
     
-    # Create the main visualization
+    # Create the main visualisation
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 12))
     
     # Plot 1: Top 10 games by average viewers
@@ -128,11 +128,11 @@ def analyze_top_games():
     
     # Print summary statistics
     print(f"\n=== Summary Statistics ===")
-    print(f"Total unique games analyzed: {len(df)}")
-    print(f"Total streams analyzed: {df['stream_count'].sum()}")
+    print(f"Total unique games analysed: {len(df)}")
+    print(f"Total streams analysed: {df['stream_count'].sum()}")
     print(f"Total viewers across all streams: {df['total_viewers'].sum():,}")
     print(f"Average viewers per game: {df['avg_viewers'].mean():.0f}")
     print(f"Most popular game by average viewers: {df.iloc[0]['game_name']} ({df.iloc[0]['avg_viewers']:,.0f} avg viewers)")
 
 if __name__ == "__main__":
-    analyze_top_games()
+    analyse_top_games()
