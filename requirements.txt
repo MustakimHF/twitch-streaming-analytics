@@ -3,3 +3,5 @@ numpy
 requests
 python-dotenv
 SQLAlchemy
+matplotlib
+seaborn  
