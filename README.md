@@ -59,27 +59,79 @@ twitch-streaming-analytics/
 
 ---
 
-## ▶️ How to Run  
+## ▶️ How to Run (Local, Python + SQLite)
 
-### 1. Clone repo & create `.env`  
+### 1. Create a virtual environment  
 
-```bash
-cp .env.example .env
+**Windows PowerShell**
+```powershell
+python -m venv venv
+venv\Scripts\Activate.ps1
 ```
 
-Fill in:  
-```env
-TWITCH_CLIENT_ID=your_twitch_client_id
-TWITCH_CLIENT_SECRET=your_twitch_client_secret
-POSTGRES_USER=airflow
-POSTGRES_PASSWORD=airflow
-POSTGRES_DB=twitch
+**macOS/Linux**
+```bash
+python3 -m venv venv
+source venv/bin/activate
 ```
 
 ---
 
-### 2. Start services with Docker  
+### 2. Install dependencies  
+```bash
+pip install -r requirements.txt
+```
 
+---
+
+### 3. Configure environment variables  
+Copy the example file and add your Twitch API credentials:  
+
+**Windows**
+```powershell
+copy .env.example .env
+```
+
+**macOS/Linux**
+```bash
+cp .env.example .env
+```
+
+Edit `.env`:
+```env
+TWITCH_CLIENT_ID=your_twitch_client_id
+TWITCH_CLIENT_SECRET=your_twitch_client_secret
+```
+
+---
+
+### 4. Run the ETL pipeline (local, SQLite target)  
+```bash
+python scripts/run_etl.py
+```
+✅ Produces:  
+- `data/raw/streams_raw.csv` (raw API data)  
+- `data/processed/streams_processed.csv` (cleaned/enriched)  
+- `db/twitch.db` (SQLite database with `streams` table)  
+
+---
+
+### 5. Run analysis scripts  
+```bash
+python analysis/top_games.py
+python analysis/peak_hours.py
+python analysis/weekend_analysis.py
+```
+✅ Produces plots in `outputs/plots/`:
+- `top_games.png` – Top games by viewers  
+- `peak_hours.png` – Hourly viewing trends  
+- `weekend_analysis.png` – Weekend vs weekday  
+
+---
+
+## ▶️ How to Run (Docker + Airflow + Postgres)
+
+### 1. Start Docker services  
 ```bash
 docker compose up -d
 ```
@@ -93,35 +145,24 @@ Login to Airflow:
 
 ---
 
-### 3. Trigger the ETL DAG  
-
-- In Airflow UI, enable `twitch_etl_dag`  
-- Monitor tasks: `extract → transform → load`  
-- Data lands in Postgres `streams` table  
+### 2. Trigger the ETL DAG  
+- Open the Airflow UI.  
+- Enable the `twitch_etl_dag`.  
+- Monitor tasks: `extract → transform → load`.  
+- Data lands in Postgres `streams` table.  
 
 ---
 
-### 4. Explore & Analyse  
-
-Run analysis scripts to generate insights and visualisations:  
+### 3. Run analysis scripts  
+Even when using Docker/Postgres, you can run the same analysis scripts locally:  
 
 ```bash
-# Top games analysis
 python analysis/top_games.py
-
-# Peak hours analysis  
 python analysis/peak_hours.py
-
-# Weekend vs weekday analysis
 python analysis/weekend_analysis.py
 ```
 
-Generates plots in `outputs/plots/`, including:  
-
-- 📊 **Top games by average viewers** (bar charts + scatter plots)
-- ⏰ **Peak hours analysis** (hourly viewership patterns)  
-- 📅 **Weekend vs weekday comparison** (temporal trends)
-- 🎯 **Game popularity analysis** (stream count vs viewers)  
+Outputs → `outputs/plots/`
 
 ---
 
@@ -134,7 +175,6 @@ Generates plots in `outputs/plots/`, including:
 ![Peak Hours](outputs/plots/peak_hours_analysis.png)  
 
 **Weekend vs Weekday Comparison**  
-
 
 ---
 
@@ -155,9 +195,3 @@ This project showcases **real-world data engineering**:
 - `.env` is git-ignored — never commit secrets  
 - Airflow uses a Postgres backend (persistent via Docker volume)  
 - Extend project: add sentiment analysis on Twitch chat logs, or track streamer growth over time  
-
----
-
-## 📄 Licence  
-
-MIT Licence – free to use and adapt.  
