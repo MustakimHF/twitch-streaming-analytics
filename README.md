@@ -172,6 +172,9 @@ Outputs → `outputs/plots/`
 **Peak Hours Analysis**  
 ![Peak Hours](outputs/plots/peak_hours_analysis.png)  
 
+### PowerBI example visual
+<img width="1279" height="717" alt="image" src="https://github.com/user-attachments/assets/c9b39990-2161-4881-b0c4-190294cbf88e" />
+
 ---
 
 ## 🎯 Why This Project Matters  
