@@ -120,12 +120,10 @@ python scripts/run_etl.py
 ```bash
 python analysis/top_games.py
 python analysis/peak_hours.py
-python analysis/weekend_analysis.py
 ```
 ✅ Produces plots in `outputs/plots/`:
 - `top_games.png` – Top games by viewers  
 - `peak_hours.png` – Hourly viewing trends  
-- `weekend_analysis.png` – Weekend vs weekday  
 
 ---
 
@@ -159,7 +157,7 @@ Even when using Docker/Postgres, you can run the same analysis scripts locally:
 ```bash
 python analysis/top_games.py
 python analysis/peak_hours.py
-python analysis/weekend_analysis.py
+
 ```
 
 Outputs → `outputs/plots/`
@@ -173,8 +171,6 @@ Outputs → `outputs/plots/`
 
 **Peak Hours Analysis**  
 ![Peak Hours](outputs/plots/peak_hours_analysis.png)  
-
-**Weekend vs Weekday Comparison**  
 
 ---
 
